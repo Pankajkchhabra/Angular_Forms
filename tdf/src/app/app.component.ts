@@ -12,7 +12,9 @@ export class AppComponent {
    topics = ['Angular', 'React', 'Vue' ];
    topicHasError = true;
    submitted = false;
+   errorMsg = '';
    userModel = new User('Rob', 'Rob@test.com', '5108246539', 'default', 'morning', true);
+
 
   constructor(private _enrollmentService: EnrollmentService) {}
 
@@ -29,7 +31,7 @@ export class AppComponent {
     this._enrollmentService.enroll(this.userModel)
       .subscribe(
         data => console.log('Success!', data),
-        error => console.error('Error!', error)
+        error => this.errorMsg = error.statusText
         );
    }
 
