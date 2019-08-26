@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <h2>Registeration Form</h2>
   {{registerationForm.value | json}}
-  <form [formGroup] ="registerationForm" >
+  <form [formGroup] ="registerationForm" (ngSubmit)="onSubmit()" >
     <div class="form-group">
       <label>User Name</label>
       <input [class.is-invalid]="userName.invalid &&  userName.touched"
@@ -14,12 +14,22 @@
         </div>
     </div>
     <div class="form-group-">
-      <label >Password</label>
-      <input formControlName="password" type="password" class="form-control">
+      <label >Email</label>
+      <button type="button" class="btn btn-secondary btn-sm m-2" (click)="addAlternateEmails()" >Add e-mail</button>
+      <input [class.is-invalid]="email.invalid && email.touched" formControlName="email" type="email" class="form-control">
+      <small class= "text-danger" [class.d-none]="email.valid || email.untouched" >Email is required</small>
+      <div formArrayName="alternateEmails" *ngFor="let email of alternateEmails.controls; let i=index">
+        <input type="text" class="form-control my-1" [formControlName]="i">
+      </div>
+    </div>    
+    <div class="form-check mb-3-">
+      <input formControlName="subscribe" type="checkbox" class="form-check-input">
+      <label class="form-check-label" >Send me promotional offers</label>
     </div>
     <div class="form-group-">
         <label >Confirm Password</label>
-        <input  formControlName="confirmPassword" type="password" class="form-control">
+        <input [class.is-invalid]="registerationForm.errors?.mismatch" formControlName="confirmPassword" type="password" class="form-control">
+        <small *ngIf ="registerationForm.errors?.mismatch" class="text-danger" >Password and confirm Password do not match</small>
     </div>
     <div formGroupName="address">
       <div class="form-group">
@@ -36,7 +46,7 @@
       </div>                  
     </div>
 
-    <button class="btn btn-primary" type="submit">Register</button>
+    <button [disabled]="!registerationForm.valid" class="btn btn-primary" type="submit">Register</button>
     <button class="btn btn-secondary ml-2" (click)="loadApiData()" type="menu" > Load API Data</button>
   </form>
   
